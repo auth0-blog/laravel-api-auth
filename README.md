@@ -1,62 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Build and Secure a Laravel API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repo demonstrates how to use [Auth0](https://auth0.com) to secure a Laravel 8 API. For the full step-by-step tutorial, check out [Build and Secure a Laravel API](https://auth0.com/blog/build-and-secure-laravel-api).
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Composer
+- PHP >= 7.3
+- A [free Auth0 account](https://auth0.com/signup)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Grab the repo and install the dependencies.
 
-## Learning Laravel
+```bash
+git clone git@github.com:auth0-blog/laravel-api-auth.git
+cd laravel-api-auth
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Auth0 setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+If you haven't already, sign up for your [free Auth0 account](https://auth0.com/signup).
 
-## Laravel Sponsors
+Once in your dashboard, you need to create and register your Laravel API with Auth0.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- Click on "Applications" > "APIs" in the left sidebar
+- Click the "Create API" button
+- Enter a "Name" and "Identifier" for your API
+- Leave Signing Algorithm as is
+- Click "Create"
 
-### Premium Partners
+Leave this tab open as you'll need it soon.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+### Environment variables
 
-## Contributing
+Rename `.env.example` to `.env`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+mv .env.example .env
+```
 
-## Code of Conduct
+Open up `.env` and fill in the values for `AUTH0_DOMAIN` and `API_IDENTIFIER`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+To find these values:
 
-## Security Vulnerabilities
+- Go to the Laravel API you just registered in your Auth0 dashboard
+- Click on the "Quick Start" tab
+- Click on "PHP"
+- Copy the value for valid_audiences and paste it in as the value for API_IDENTIFIER
+- Copy the value for authorized_iss and paste it in as the value for AUTH0_DOMAIN. For this one, omit the `https://` when you paste it in
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+AUTH0_DOMAIN=your-domain.auth0.com
+API_IDENTIFIER=https://your-api.com
+AUTH0_CLIENT_SECRET=
+AUTH0_CLIENT_ID=
+```
 
-## License
+The last two values can be left empty, but the SDK requires them to exist.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Database Setup
+
+This demo uses SQLite. Create your database by running:
+
+```bash
+touch database/database.sqlite
+```
+
+Open up the file, and paste in:
+
+```
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database.sqlite
+```
+
+> Note: You need to use the absolute path to the database.sqlite file you just created as the value for DB_DATABASE. You can usually get this by right-clicking the file in your code editor and clicking "Copy path".
+
+### Migrate and Seed your database
+
+Run the migrations and seed the database with:
+
+```bash
+php artisan migrate --seed
+```
+
+## Running your app
+
+Run the application with:
+
+```bash
+php artisan serve
+```
+
+## Testing
+
+The endpoints to get all comments and get a single comment should be public and accessible without an access token. Run the following cURL command and you should get a response with all comments.
+
+```bash
+curl http://localhost:8000/api/comments -i
+```
+
+Now, try to create a comment with the following:
+
+```bash
+curl -X POST -H 'Content-Type: application/json' -d '{
+  "name": "Lucy",
+  "text": "An authorized comment"
+}' http://localhost:8000/api/comments -i
+```
+
+This should give you an error, as you haven't provided a valid access token.
+
+### Test with an access token
+
+To get an access token, head back to your [Auth0 dashboard](https://manage.auth0.com) and go to your Laravel API page. Click on the "Test" tab and then click the copy symbol under "Response".
+
+Use the following command, but first replace `YOUR_ACCESS_TOKEN_HERE` with the test token you just copied:
+
+```bash
+curl -X POST -H 'Authorization: Bearer YOUR_ACCESS_TOKEN_HERE' -H 'Content-Type: application/json' -d '{
+    "name": "Lucy",
+    "text": "An authorized comment"
+}' http://localhost:8000/api/comments -i
+```
+
+You should now be able to create a comment! If you ran into any issues, reach out in the [comments of the tutorial](https://auth0.com/blog/build-and-secure-laravel-api) or [feel free to tweet me](https://twitter.com/hollylawly). Thanks!
