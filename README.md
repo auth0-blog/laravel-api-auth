@@ -1,6 +1,8 @@
-# Build and Secure a Laravel API
+# 🛠️ Build and Secure a Laravel API
 
-This repo demonstrates how to use [Auth0](https://auth0.com) to secure a Laravel 8 API. For the full step-by-step tutorial, check out [Build and Secure a Laravel API](https://auth0.com/blog/build-and-secure-laravel-api).
+This repo demonstrates how to use [Auth0](https://auth0.com) to secure a Laravel 8 API.
+
+For the full step-by-step tutorial, check out [Build and Secure a Laravel API](https://auth0.com/blog/build-and-secure-laravel-api).
 
 ## Prerequisites
 
