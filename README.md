@@ -51,15 +51,13 @@ To find these values:
 - Click on "PHP"
 - Copy the value for valid_audiences and paste it in as the value for API_IDENTIFIER
 - Copy the value for authorized_iss and paste it in as the value for AUTH0_DOMAIN. For this one, omit the `https://` when you paste it in
+- Click on the "Machine to machine applications" tab and find the Test Application that was created for your API. Copy the Client ID and paste it in as the value for `AUTH0_CLIENT_ID`
 
 ```
 AUTH0_DOMAIN=your-domain.auth0.com
 API_IDENTIFIER=https://your-api.com
-AUTH0_CLIENT_SECRET=
 AUTH0_CLIENT_ID=
 ```
-
-The last two values can be left empty, but the SDK requires them to exist.
 
 ## Database Setup
 
