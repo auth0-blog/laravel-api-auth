@@ -94,6 +94,8 @@ Run the application with:
 php artisan serve
 ```
 
+If you get the message that your app key is missing, click on the button to generate one, and then refresh.
+
 ## Testing
 
 The endpoints to get all comments and get a single comment should be public and accessible without an access token. Run the following cURL command and you should get a response with all comments.
