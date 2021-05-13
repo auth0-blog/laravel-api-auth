@@ -69,7 +69,7 @@ This demo uses SQLite. Create your database by running:
 touch database/database.sqlite
 ```
 
-Open up the file, and paste in:
+Open up your `.env` file again, find the following variables, and replace them with:
 
 ```
 DB_CONNECTION=sqlite
