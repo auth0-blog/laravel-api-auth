@@ -42,7 +42,7 @@ Rename `.env.example` to `.env`
 mv .env.example .env
 ```
 
-Open up `.env` and fill in the values for `AUTH0_DOMAIN` and `API_IDENTIFIER`.
+Open up `.env` and fill in the values for `AUTH0_DOMAIN`, `API_IDENTIFIER`, and `AUTH0_CLIENT_ID`.
 
 To find these values:
 
